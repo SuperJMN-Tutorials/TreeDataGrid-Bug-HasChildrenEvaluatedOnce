@@ -6,12 +6,26 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="TreeDataGridExpandBug.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
+		Width="500"
+		Height="400"
         Title="TreeDataGridExpandBug">
 
-    <Design.DataContext>
-        <vm:MainWindowViewModel/>
-    </Design.DataContext>
+	<Design.DataContext>
+		<vm:MainWindowViewModel/>
+	</Design.DataContext>
 
-    <TreeDataGrid Source="{Binding Source}" />
+	<DockPanel>
+		<TextBlock Margin="10" DockPanel.Dock="Top">Please, notice how the grid on the left will update normally, but the one on the right will never be expandable although their share the same data</TextBlock>
+        <Grid ColumnDefinitions="* *" Margin="20">
+			<StackPanel Spacing="10">
+				<TextBlock Foreground="Gray">With hasChildren=true</TextBlock>
+				<TreeDataGrid Source="{Binding Source1}" />
+			</StackPanel>
+			<StackPanel Grid.Column="1" Spacing="10">
+				<TextBlock Foreground="Gray">With hasChildren=children.Any()</TextBlock>
+				<TreeDataGrid Source="{Binding Source2}" />
+			</StackPanel>
+		</Grid>
+	</DockPanel>
 
 </Window>

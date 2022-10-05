@@ -17,14 +17,22 @@ public class MainWindowViewModel : ViewModelBase
         var rootNode = new TreeNode(new ViewModel("Root"), children);
 
         Observable
-            .Interval(TimeSpan.FromSeconds(2), RxApp.MainThreadScheduler)
+            .Interval(TimeSpan.FromSeconds(4), RxApp.MainThreadScheduler)
             .Subscribe(l => children.Add(new TreeNode(new ViewModel($"Child {l}"))));
-        
+
         var items = new ObservableCollection<TreeNode>(new ObservableCollection<TreeNode> {rootNode});
 
         var nameColumn = new TextColumn<TreeNode, string>("Name", treeNode => ((ViewModel) treeNode.Value).Name);
 
-        Source = new HierarchicalTreeDataGridSource<TreeNode>(items)
+        Source1 = new HierarchicalTreeDataGridSource<TreeNode>(items)
+        {
+            Columns =
+            {
+                new HierarchicalExpanderColumn<TreeNode>(nameColumn, x => x.Children, x => true),
+            }
+        };
+
+        Source2 = new HierarchicalTreeDataGridSource<TreeNode>(items)
         {
             Columns =
             {
@@ -33,7 +41,9 @@ public class MainWindowViewModel : ViewModelBase
         };
     }
 
-    public HierarchicalTreeDataGridSource<TreeNode> Source { get; }
+    public HierarchicalTreeDataGridSource<TreeNode> Source2 { get; }
+
+    public HierarchicalTreeDataGridSource<TreeNode> Source1 { get; }
 }
 
 public class ViewModel
